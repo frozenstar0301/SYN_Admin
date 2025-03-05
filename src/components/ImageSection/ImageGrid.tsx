@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { ImageItem } from '../../types';
+import { ImageItem } from '../../types/index';
 
 interface Props {
   images: ImageItem[];

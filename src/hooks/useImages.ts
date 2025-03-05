@@ -1,44 +1,31 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
 import { ImageItem } from '../types';
+
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+const api = axios.create({
+    baseURL: API_URL,
+});
 
 export const useImages = () => {
     const [images, setImages] = useState<ImageItem[]>([]);
     const [isUploading, setIsUploading] = useState(false);
 
     const fetchImages = async () => {
-        const { data } = await supabase
-            .from('images')
-            .select('*')
-            .order('created_at', { ascending: false });
+        const response = await api.get('/images');
 
-        if (data) setImages(data);
+        if (response.data) setImages(response.data);
     };
 
     const uploadImage = async (file: File) => {
         setIsUploading(true);
         try {
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
-
-            const { data, error } = await supabase.storage
-                .from('images')
-                .upload(fileName, file);
-
-            if (error) throw error;
-
-            if (data) {
-                const { data: publicURL } = supabase.storage
-                    .from('images')
-                    .getPublicUrl(fileName);
-
-                await supabase.from('images').insert({
-                    url: publicURL.publicUrl,
-                    name: file.name,
-                });
-
-                fetchImages();
-            }
+            const formData = new FormData();
+            formData.append('image', file);
+            const response = await api.post('/images/upload', formData);
+            if (response.data) setImages(response.data);
         } catch (error) {
             console.error('Error uploading image:', error);
         } finally {

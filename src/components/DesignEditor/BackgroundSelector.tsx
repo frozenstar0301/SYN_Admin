@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { ImageGrid } from '../ImageSection/ImageGrid';
-import { ImageItem } from '../../types';
+import { ImageItem } from '../../types/index';
 
 interface Props {
   title: string;

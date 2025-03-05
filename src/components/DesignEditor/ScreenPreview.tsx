@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Checkbox, TextField, Typography, FormControlLabel } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { Paper } from '@mui/material';
 import { Screen, FontItem, ImageItem } from '../../types/index';
 
@@ -11,9 +11,17 @@ interface Props {
 
 export const ScreenPreview: React.FC<Props> = ({ screen, fonts, images }) => {
   const [fontsLoaded, setFontsLoaded] = useState<{ [key: string]: boolean }>({});
+  const [isChecked, setIsChecked] = useState(false);
   const backgroundImage = images.find(img => img.id === screen.background_image_id);
   const buttonImage = images.find(img => img.id === screen.button_image_id);
   const signinFont = fonts.find(font => font.id === screen.font_id);
+  const subpanelImage = images.find(img => img.id === screen.subpanel_image_id);
+  const emailImage = images.find(img => img.id === screen.email_image_id);
+  const passwordImage = images.find(img => img.id === screen.password_image_id);
+  const checkboxImage = images.find(img => img.id === screen.checkbox_image_id);
+  
+  // Get the checkbox background color from screen props or use default
+  const checkboxBackgroundColor = screen.checkbox_background_color || '#8BC34A';
 
   // Font loading logic remains the same
   useEffect(() => {
@@ -71,6 +79,10 @@ export const ScreenPreview: React.FC<Props> = ({ screen, fonts, images }) => {
     }
   };
 
+  const toggleCheckbox = () => {
+    setIsChecked(!isChecked);
+  };
+
   return (
     <Paper
       sx={{
@@ -116,180 +128,304 @@ export const ScreenPreview: React.FC<Props> = ({ screen, fonts, images }) => {
           Sign In
         </Typography>
 
-        {/* New Form Container */}
         <Box
           sx={{
-            width: '100%',
-            backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent green
+            width: '90%',
+            position: 'relative',
             borderRadius: '50px',
             padding: '2rem',
+            overflow: 'hidden',
           }}
         >
-          <Box sx={{ marginBottom: '1rem' }}>
-            <Typography
+          {subpanelImage && (
+            <Box
               sx={{
-                color: 'white',
-                marginBottom: '0.5rem',
-                ...fontStyle,
-              }}
-            >
-              Email
-            </Typography>
-            <TextField
-              fullWidth
-              placeholder="Enter your email."
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  bgcolor: '#8BC34A',
-                  borderRadius: '25px',
-                  '& fieldset': {
-                    border: '1px solid white', // Added white border
-                  },
-                },
-                '& .MuiOutlinedInput-input': {
-                  color: 'white',
-                  ...fontStyle,
-                },
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundImage: `url(${subpanelImage.url})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                opacity: 0.3,
+                zIndex: 0,
               }}
             />
-          </Box>
-
-          <Box sx={{ marginBottom: '1rem' }}>
-            <Typography
-              sx={{
-                color: 'white',
-                marginBottom: '0.5rem',
-                ...fontStyle,
-              }}
-            >
-              Password
-            </Typography>
-            <TextField
-              fullWidth
-              type="password"
-              placeholder="Enter your password."
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  bgcolor: '#8BC34A',
-                  borderRadius: '25px',
-                  '& fieldset': {
-                    border: '1px solid white',
-                  },
-                },
-                '& .MuiOutlinedInput-input': {
-                  color: 'white',
-                  ...fontStyle,
-                },
-              }}
-            />
-          </Box>
-
+          )}
+          
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: '1rem',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: subpanelImage ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.3)',
+              zIndex: 0,
             }}
-          >
-            <FormControlLabel
-              labelPlacement="start" // This will place the label before the checkbox
-              control={
-                <Checkbox
-                  sx={{
-                    color: 'white',
-                    '&.Mui-checked': { color: 'white' },
-                    marginLeft: '8px', // Add some space between label and checkbox
-                  }}
-                />
-              }
-              label="Remember Me"
-              sx={{
-                color: 'white',
-                fontWeight: 'bold',
-                margin: 0, // Remove default margin
-                '& .MuiFormControlLabel-label': {
-                  ...fontStyle,
-                },
-              }}
-            />
-          </Box>
-
+          />
+          
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '1rem',
-              marginTop: '0.5rem',
-              marginBottom: '1rem',
-              color: 'white',
-              ...fontStyle,
-              '& a': {
-                color: '#CCE8A6', // Changed link color to #CCE8A6
-                textDecoration: 'underline',
-                ...fontStyle,
-              },
+              position: 'relative',
+              zIndex: 1,
             }}
           >
-            <Typography sx={{ color: 'white', fontWeight: 'bold', ...fontStyle }}>
-              No account?{' '}
-              <a href="#" style={{ ...fontStyle, color: '#CCE8A6' }}>Create One!</a>
-            </Typography>
-            <a href="#" style={{ ...fontStyle, color: '#CCE8A6' }}>Forget Password</a>
-          </Box>
-
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100%'
-            }}
-          >
-            <Button
-              sx={{
-                width: '30%',
-                height: '40px',
-                bgcolor: buttonImage ? 'transparent' : '#D3EDB0',
-                color: 'white',
-                borderRadius: '25px',
-                textTransform: 'none',
-                position: 'relative',
-                padding: '30px 16px',
-                overflow: 'hidden',
-                ...fontStyle,
-                '&:hover': {
-                  bgcolor: buttonImage ? 'rgba(255, 255, 255, 0.5)' : '#D3EDB0',
-                },
-              }}
-            >
-              {buttonImage && (
-                <Box
-                  component="img"
-                  src={buttonImage.url}
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: 'center',
-                  }}
-                  alt=""
-                />
-              )}
+            <Box sx={{ marginBottom: '1rem' }}>
               <Typography
                 sx={{
-                  position: buttonImage ? 'relative' : 'static',
-                  zIndex: 1,
-                  fontSize: "1.5rem",
-                  fontWeight: 'bold',
+                  color: 'white',
+                  marginBottom: '0.5rem',
                   ...fontStyle,
                 }}
               >
-                Login
+                Email
               </Typography>
-            </Button>
+              <Box sx={{ position: 'relative', width: '100%' }}>
+                {emailImage && (
+                  <Box
+                    component="img"
+                    src={emailImage.url}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                      borderRadius: '25px',
+                    }}
+                    alt=""
+                  />
+                )}
+                <TextField
+                  fullWidth
+                  placeholder="Enter your email."
+                  sx={{
+                    position: 'relative',
+                    zIndex: 1,
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor: emailImage ? 'transparent' : '#8BC34A',
+                      borderRadius: '25px',
+                      '& fieldset': {
+                        border: '1px solid white',
+                      },
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      color: 'white',
+                      ...fontStyle,
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
+
+            <Box sx={{ marginBottom: '1rem' }}>
+              <Typography
+                sx={{
+                  color: 'white',
+                  marginBottom: '0.5rem',
+                  ...fontStyle,
+                }}
+              >
+                Password
+              </Typography>
+              <Box sx={{ position: 'relative', width: '100%' }}>
+                {passwordImage && (
+                  <Box
+                    component="img"
+                    src={passwordImage.url}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                      borderRadius: '25px',
+                    }}
+                    alt=""
+                  />
+                )}
+                <TextField
+                  fullWidth
+                  type="password"
+                  placeholder="Enter your password."
+                  sx={{
+                    position: 'relative',
+                    zIndex: 1,
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor: passwordImage ? 'transparent' : '#8BC34A',
+                      borderRadius: '25px',
+                      '& fieldset': {
+                        border: '1px solid white',
+                      },
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      color: 'white',
+                      ...fontStyle,
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: '1rem',
+              }}
+            >
+              <Box
+                onClick={toggleCheckbox}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                    ...fontStyle,
+                  }}
+                >
+                  Remember Me &nbsp;
+                </Typography>
+                <Box
+                  sx={{
+                    width: '24px',
+                    height: '24px',
+                    // Use the checkbox background color from screen props
+                    backgroundColor: checkboxBackgroundColor,
+                    borderRadius: '4px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginRight: '8px',
+                    position: 'relative',
+                  }}
+                >
+                  {isChecked && (
+                    <Box
+                      sx={{
+                        width: '16px',
+                        height: '16px',
+                        position: 'absolute',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {checkboxImage ? (
+                        <Box
+                          component="img"
+                          src={checkboxImage.url}
+                          sx={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                          }}
+                          alt="Checkmark"
+                        />
+                      ) : (
+                        <Box
+                          sx={{
+                            width: '16px',
+                            height: '16px',
+                            backgroundColor: 'white',
+                            clipPath: 'polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%)',
+                          }}
+                        />
+                      )}
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '1rem',
+                marginTop: '0.5rem',
+                marginBottom: '1rem',
+                color: 'white',
+                ...fontStyle,
+                '& a': {
+                  color: '#CCE8A6',
+                  textDecoration: 'underline',
+                  ...fontStyle,
+                },
+              }}
+            >
+              <Typography sx={{ color: 'white', fontWeight: 'bold', ...fontStyle }}>
+                No account?{' '}
+                <a href="#" style={{ ...fontStyle, color: '#CCE8A6' }}>Create One!</a>
+              </Typography>
+              <a href="#" style={{ ...fontStyle, color: '#CCE8A6' }}>Forget Password</a>
+            </Box>
+
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                width: '100%'
+              }}
+            >
+              <Button
+                sx={{
+                  width: '30%',
+                  height: '40px',
+                  bgcolor: buttonImage ? 'transparent' : '#D3EDB0',
+                  color: 'white',
+                  borderRadius: '25px',
+                  textTransform: 'none',
+                  position: 'relative',
+                  padding: '30px 16px',
+                  overflow: 'hidden',
+                  ...fontStyle,
+                  '&:hover': {
+                    bgcolor: buttonImage ? 'rgba(255, 255, 255, 0.5)' : '#D3EDB0',
+                  },
+                }}
+              >
+                {buttonImage && (
+                  <Box
+                    component="img"
+                    src={buttonImage.url}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                    }}
+                    alt=""
+                  />
+                )}
+                <Typography
+                  sx={{
+                    position: buttonImage ? 'relative' : 'static',
+                    zIndex: 1,
+                    fontSize: "1.5rem",
+                    fontWeight: 'bold',
+                    ...fontStyle,
+                  }}
+                >
+                  Login
+                </Typography>
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>

@@ -19,7 +19,7 @@ export const ButtonDesigner: React.FC<Props> = ({
   isUploading,
 }) => {
   return (
-    <Box>     
+    <Box>
       <Typography variant="subtitle1" gutterBottom>
         Font Styles
       </Typography>
