@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../contexts/AuthContext';
@@ -17,7 +17,6 @@ import {
   Typography,
   IconButton,
   InputAdornment,
-  Alert,
   CircularProgress
 } from '@mui/material';
 import { Visibility, VisibilityOff, Mail, Lock } from '@mui/icons-material';

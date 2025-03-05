@@ -18,7 +18,6 @@ import {
   Save as SaveIcon,
   Menu as MenuIcon,
   ExitToApp as LogoutIcon,
-  AccountCircle as AccountIcon
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 // Import the logo image

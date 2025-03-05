@@ -14,7 +14,6 @@ import {
   Toolbar,
   useTheme,
   alpha,
-  Divider,
   Chip,
   Fade,
   useMediaQuery
@@ -80,7 +79,6 @@ export const SignInCustomize = () => {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down('sm'));
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
-  const isLg = useMediaQuery(theme.breakpoints.down('lg'));
 
   const { images, uploadImage, isUploading: isUploadingImage } = useImages();
   const { fonts, uploadFont, isUploading: isUploadingFont } = useFonts();
@@ -98,7 +96,7 @@ export const SignInCustomize = () => {
     severity: 'success'
   });
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -158,7 +156,7 @@ export const SignInCustomize = () => {
     }));
   };
 
-  const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleCloseAlert = (reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -356,7 +354,7 @@ export const SignInCustomize = () => {
               >
                 <Tabs
                   value={tabValue}
-                  onChange={handleTabChange}
+                  onChange={() => handleTabChange}
                   aria-label="editor tabs"
                   variant="scrollable"
                   scrollButtons="auto"
@@ -560,11 +558,11 @@ export const SignInCustomize = () => {
       <Snackbar
         open={alert.open}
         autoHideDuration={6000}
-        onClose={handleCloseAlert}
+        onClose={() => handleCloseAlert}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
-          onClose={handleCloseAlert}
+          onClose={() => handleCloseAlert}
           severity={alert.severity}
           sx={{
             width: '100%',
